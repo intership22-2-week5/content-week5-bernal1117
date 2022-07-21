@@ -1,15 +1,43 @@
-from dataclasses import fields
-from pyexpat import model
-from unicodedata import category, name
+
 from rest_framework import serializers
 
-from .models import DispEntry, Mouse, Keyboard, Monitor, Computer, Order
+from .models import DispEntry, DispOutput, InternalDevice, Motherboard, Mouse, Keyboard, Monitor, Computer, Order, Processor, Speaker, Component
 
 
 #Esto viene de rest_framework y ayuda a la conversion de diccionarios a JSON usa tambien los modelos que teniamos
+class ComponentSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Component
+    fields = '__all__'
+
 class DispEntrySerializer(serializers.ModelSerializer):
   class Meta:
     model = DispEntry
+    fields = '__all__'
+
+class DispOutputSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = DispOutput
+    fields = '__all__'
+
+class InternalDeviceSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = InternalDevice
+    fields = '__all__'
+
+class SpeakerSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Speaker
+    fields = '__all__'
+
+class MotherboardSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Motherboard
+    fields = '__all__'
+
+class ProcessorSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Processor
     fields = '__all__'
 
 class MouseSerializer(serializers.ModelSerializer):
@@ -34,6 +62,9 @@ class ComputerSerializer(serializers.ModelSerializer):
   mouse = serializers.PrimaryKeyRelatedField(queryset=Mouse.objects.all())
   keyboard = serializers.PrimaryKeyRelatedField(queryset=Keyboard.objects.all())
   monitor = serializers.PrimaryKeyRelatedField(queryset=Monitor.objects.all())
+  speaker = serializers.PrimaryKeyRelatedField(queryset=Speaker.objects.all())
+  motherboard = serializers.PrimaryKeyRelatedField(queryset=Motherboard.objects.all())
+  processor = serializers.PrimaryKeyRelatedField(queryset=Processor.objects.all())
   class Meta:
     model = Computer
     fields = '__all__' 
@@ -44,6 +75,7 @@ class ComputerSerializer(serializers.ModelSerializer):
     return {
       'id': instance.id,
       'name': instance.name,
+      'total_cost': instance.total_cost,
       'monitor': {
         'name': instance.monitor.name,
         'trademark': instance.monitor.trademark,
@@ -58,6 +90,12 @@ class ComputerSerializer(serializers.ModelSerializer):
         'name': instance.mouse.name,
         'trademark': instance.mouse.trademark,
         'status': instance.mouse.status
+      },
+      'motherboard': {
+        'description': instance.motherboard.description
+      },
+      'processor': {
+        'description': instance.processor.description
       }
     }
 
