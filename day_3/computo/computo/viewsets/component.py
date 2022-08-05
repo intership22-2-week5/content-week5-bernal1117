@@ -1,16 +1,9 @@
-#Django rest framework 
-from rest_framework.views import Response
 from rest_framework import viewsets
 
-from .serializers import DispEntrySerializer, DispOutputSerializer, InternalDeviceSerializer, MotherboardSerializer, MouseSerializer, KeyboardSerializer, MonitorSerializer, ComputerSerializer, OrderSerializer, ProcessorSerializer, SpeakerSerializer
+from ..models.component import Component, InternalDevice, DispEntry, DispOutput, Monitor, Motherboard, Mouse, Speaker, Keyboard, Processor
+from ..serializers.component import DispEntrySerializer, DispOutputSerializer, InternalDeviceSerializer, MouseSerializer, KeyboardSerializer, MonitorSerializer, SpeakerSerializer, MotherboardSerializer, ProcessorSerializer
 
-#models
-from .models import DispEntry, DispOutput, InternalDevice, Motherboard, Mouse, Keyboard, Monitor, Computer, Order, Processor, Speaker
-"""
-class ComponentViewSets(viewsets.ModelViewSet):
-    queryset = Component.objects.all()
-    serializer_class = ComponentSerializer
-"""
+
 
 class DispEntryViewSets(viewsets.ModelViewSet):
     queryset = DispEntry.objects.all()
@@ -47,18 +40,3 @@ class MotherboardViewSets(viewsets.ModelViewSet):
 class ProcessorViewSets(viewsets.ModelViewSet):
     queryset = Processor.objects.all()
     serializer_class = ProcessorSerializer
-
-class ComputerViewSets(viewsets.ModelViewSet):
-    queryset = Computer.objects.all()
-    serializer_class = ComputerSerializer
-
-    def create(self, request, *args, **kwargs):
-        pc = super().create(request, *args, **kwargs)
-        if pc.data['id'] is not None:
-            return pc   
-        else:
-            return Response({'message': 'Falta stock'})
-
-class OrderViewSets(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
